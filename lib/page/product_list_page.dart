@@ -19,6 +19,7 @@ class _ProductListPageState extends State<ProductListPage> {
   final List<Product> productList = [];
   final bool isLoading = false;
 
+
   @override
   void initState() {
     super.initState();
@@ -28,6 +29,7 @@ class _ProductListPageState extends State<ProductListPage> {
   Future<void> loadData() async {
     var result = await productApi.fetchProducts(
       offset: productList.length,
+      // categoryId: categoryId
     );
     setState(() {
       productList.addAll(result);

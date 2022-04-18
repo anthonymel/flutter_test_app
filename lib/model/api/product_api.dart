@@ -5,13 +5,22 @@ import 'package:untitled/model/api/base_api.dart';
 
 import '../entities/product.dart';
 
-/// TODO: refactor
 class ProductApi extends BaseApi {
   Future<List<Product>> fetchProducts({
     int offset = 0,
     int limit = 10,
+    int? categoryId
   }) async {
-    final response = await sendGetRequest("common/product/list", offset, limit);
+    Map params = {
+      "offset": offset,
+      "limit": limit
+    };
+
+    if (categoryId != null) {
+      params["categoryId"] = categoryId;
+    }
+
+    final response = await sendGetRequest("common/product/list", params);
     return parseProducts(response.body);
   }
 

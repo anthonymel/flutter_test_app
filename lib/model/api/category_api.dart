@@ -9,8 +9,18 @@ class CategoryApi extends BaseApi {
   Future<List<Category>> fetchCategories({
     int offset = 0,
     int limit = 10,
+    int? parentId
   }) async {
-    final response = await sendGetRequest("common/category/list", offset, limit);
+    Map params = {
+      "offset": offset,
+      "limit": limit
+    };
+
+    if (parentId != null) {
+      params["parentId"] = parentId;
+    }
+
+    final response = await sendGetRequest("common/category/list", params);
     return parseCategories(response.body);
   }
 
