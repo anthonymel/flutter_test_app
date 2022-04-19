@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/model/entities/product.dart';
 import 'package:untitled/view/product_detail_item.dart';
@@ -32,7 +33,7 @@ class ProductListItem extends StatelessWidget {
             if (product.images?.isNotEmpty ?? false)
               Expanded(
                 flex: 2,
-                child: Image.network(product.images!.first),
+                child: ExtendedImage.network(product.images!.first),
               ),
             const SizedBox(
               width: 12,

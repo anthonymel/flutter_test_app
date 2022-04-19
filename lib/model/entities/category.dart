@@ -1,10 +1,12 @@
 class Category {
+  final int categoryId;
   final String title;
   final String? imageUrl;
   final int hasSubcategories;
   final String? categoryDescription;
 
   const Category({
+    required this.categoryId,
     required this.title,
     this.imageUrl,
     required this.hasSubcategories,
@@ -13,6 +15,7 @@ class Category {
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
+      categoryId: json['categoryId'] as int,
       title: json['title'] as String,
       imageUrl: json['imageUrl'] as String?,
       hasSubcategories: json['hasSubcategories'] as int,

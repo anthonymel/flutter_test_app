@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/model/entities/product.dart';
 
@@ -21,7 +22,7 @@ class ProductDetailItem extends StatelessWidget {
                 alignment: Alignment.center,
                 child: FractionallySizedBox(
                   widthFactor: 0.7,
-                  child: Image.network(product.images!.first),
+                  child: ExtendedImage.network(product.images!.first),
               )
             ),
             const SizedBox(height: 12),

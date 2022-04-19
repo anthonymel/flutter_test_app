@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/model/api/product_api.dart';
+import 'package:untitled/model/entities/category.dart';
 import 'package:untitled/model/entities/product.dart';
 import 'package:untitled/view/product_list_item.dart';
 
 class ProductListPage extends StatefulWidget {
-  const ProductListPage({
-    Key? key,
-  }) : super(
+  const ProductListPage({Key? key, this.category})
+      : super(
           key: key,
         );
+  final Category? category;
 
   @override
   _ProductListPageState createState() => _ProductListPageState();
@@ -28,8 +29,8 @@ class _ProductListPageState extends State<ProductListPage> {
 
   Future<void> loadData() async {
     var result = await productApi.fetchProducts(
-      offset: productList.length,
-      // categoryId: categoryId
+        categoryId: widget.category?.categoryId,
+        offset: productList.length
     );
     setState(() {
       productList.addAll(result);
@@ -46,7 +47,7 @@ class _ProductListPageState extends State<ProductListPage> {
 
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text('Все товары'),
+      title: Text(widget.category == null ? 'Все товары' : widget.category!.title),
     );
   }
 
