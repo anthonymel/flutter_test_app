@@ -49,13 +49,18 @@ class _CategoryListPageState extends State<CategoryListPage> {
   }
 
   Widget buildBody(BuildContext context) {
-    return ListView.builder(
+    return GridView.builder(
       itemBuilder: (BuildContext context, int index) {
         var category = categoryList[index];
         return CategoryListItem(
           category: category,
         );
       },
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 250,
+          childAspectRatio: 3 / 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 24),
       itemCount: categoryList.length,
       padding: const EdgeInsets.only(
         left: 12,

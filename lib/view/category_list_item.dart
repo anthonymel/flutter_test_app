@@ -29,21 +29,22 @@ class CategoryListItem extends StatelessWidget {
             )
           );
         },
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (category.imageUrl?.isNotEmpty ?? false)
-              Flexible(
-                flex: 1,
+              Expanded(
+                flex: 4,
                 child: ExtendedImage.network(category.imageUrl!),
               ),
             const SizedBox(
-              width: 12,
+              height: 12,
             ),
-            Flexible(
-              flex: 3,
+            Expanded(
+              flex: 1,
               child: Text(
                 category.title,
+                maxLines: 1,
               ),
             ),
           ],
