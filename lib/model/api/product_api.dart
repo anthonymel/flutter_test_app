@@ -6,21 +6,18 @@ import 'package:untitled/model/api/base_api.dart';
 import '../entities/product.dart';
 
 class ProductApi extends BaseApi {
-  Future<List<Product>> fetchProducts({
-    int offset = 0,
-    int limit = 10,
-    int? categoryId
-  }) async {
-    Map params = {
+  Future<List<Product>> loadProducts(
+      {int offset = 0, int limit = 10, int? categoryId}) async {
+    var params = <String, dynamic>{
       "offset": offset,
-      "limit": limit
+      "limit": limit,
+      if (categoryId != null) "categoryId": categoryId,
     };
 
-    if (categoryId != null) {
-      params["categoryId"] = categoryId;
-    }
-
-    final response = await sendGetRequest("common/product/list", params);
+    final response = await sendGetRequest(
+      method: "/api/common/product/list",
+      params: params,
+    );
     return parseProducts(response.body);
   }
 

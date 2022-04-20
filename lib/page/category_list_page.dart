@@ -3,12 +3,16 @@ import 'package:untitled/model/api/category_api.dart';
 import 'package:untitled/model/entities/category.dart';
 import 'package:untitled/view/category_list_item.dart';
 
+import 'product_list_page.dart';
+
 class CategoryListPage extends StatefulWidget {
   const CategoryListPage({
     Key? key,
+    this.parentId
   }) : super(
           key: key,
         );
+  final int? parentId;
 
   @override
   _CategoryListPageState createState() => _CategoryListPageState();
@@ -17,6 +21,8 @@ class CategoryListPage extends StatefulWidget {
 class _CategoryListPageState extends State<CategoryListPage> {
   final CategoryApi categoryApi = CategoryApi();
   final List<Category> categoryList = [];
+
+  //TODO: add loading impl
   final bool isLoading = false;
 
   @override
@@ -26,8 +32,9 @@ class _CategoryListPageState extends State<CategoryListPage> {
   }
 
   Future<void> loadData() async {
-    var result = await categoryApi.fetchCategories(
+    var result = await categoryApi.loadCategories(
       offset: categoryList.length,
+      parentId: widget.parentId,
     );
     setState(() {
       categoryList.addAll(result);
@@ -52,15 +59,19 @@ class _CategoryListPageState extends State<CategoryListPage> {
     return GridView.builder(
       itemBuilder: (BuildContext context, int index) {
         var category = categoryList[index];
-        return CategoryListItem(
-          category: category,
+        return InkWell(
+          onTap: () => onItemTap(category),
+          child: CategoryListItem(
+            category: category,
+          ),
         );
       },
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 250,
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 24),
+        maxCrossAxisExtent: 250,
+        childAspectRatio: 3 / 2,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 24,
+      ),
       itemCount: categoryList.length,
       padding: const EdgeInsets.only(
         left: 12,
@@ -68,5 +79,18 @@ class _CategoryListPageState extends State<CategoryListPage> {
         top: 12,
       ),
     );
+  }
+
+  onItemTap(Category category) {
+    {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => category.hasSubcategories == 0
+                  ? ProductListPage(
+                      category: category,
+                    )
+                  : CategoryListPage(parentId: category.categoryId)));
+    }
   }
 }

@@ -10,13 +10,15 @@ class BottomNavigationMenu extends StatefulWidget {
 }
 
 class _BottomNavigationMenuState extends State<BottomNavigationMenu> {
-  int _selectedIndex = 0;
+  //TODO: remove unused
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     CategoryListPage(),
     ProductListPage(),
   ];
+
+  int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -29,6 +31,7 @@ class _BottomNavigationMenuState extends State<BottomNavigationMenu> {
     return Scaffold(
       primary: false,
       body: Center(
+        //TODO: buildMenuContent(context, selectedIndex)
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(

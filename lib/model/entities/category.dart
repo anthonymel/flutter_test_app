@@ -1,3 +1,5 @@
+//TODO: code generation https://docs.flutter.dev/development/data-and-backend/json
+
 class Category {
   final int categoryId;
   final String title;

@@ -1,3 +1,5 @@
+//TODO: code generation https://docs.flutter.dev/development/data-and-backend/json
+
 class Product {
   final String title;
   final String? description;

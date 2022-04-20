@@ -1,7 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/model/entities/product.dart';
-import 'package:untitled/view/product_detail_item.dart';
+import 'package:untitled/page/product_detail_page.dart';
 
 class ProductListItem extends StatelessWidget {
   const ProductListItem({
@@ -23,7 +23,7 @@ class ProductListItem extends StatelessWidget {
         onTap: () {
           Navigator.push(context,
             MaterialPageRoute(
-              builder: (context) => ProductDetailItem(product: product),
+              builder: (context) => ProductDetailPage(product: product),
             )
           );
         },
@@ -51,7 +51,7 @@ class ProductListItem extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(
-                        builder: (context) => ProductDetailItem(product: product),
+                        builder: (context) => ProductDetailPage(product: product),
                       )
                   );
                 },

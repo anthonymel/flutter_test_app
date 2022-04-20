@@ -5,8 +5,10 @@ import 'package:untitled/model/entities/product.dart';
 import 'package:untitled/view/product_list_item.dart';
 
 class ProductListPage extends StatefulWidget {
-  const ProductListPage({Key? key, this.category})
-      : super(
+  const ProductListPage({
+    Key? key,
+    this.category,
+  }) : super(
           key: key,
         );
   final Category? category;
@@ -18,8 +20,7 @@ class ProductListPage extends StatefulWidget {
 class _ProductListPageState extends State<ProductListPage> {
   final ProductApi productApi = ProductApi();
   final List<Product> productList = [];
-  final bool isLoading = false;
-
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -28,11 +29,17 @@ class _ProductListPageState extends State<ProductListPage> {
   }
 
   Future<void> loadData() async {
-    var result = await productApi.fetchProducts(
-        categoryId: widget.category?.categoryId,
-        offset: productList.length
+    if (productList.isEmpty) {
+      setState(() {
+        isLoading = true;
+      });
+    }
+    var result = await productApi.loadProducts(
+      categoryId: widget.category?.categoryId,
+      offset: productList.length,
     );
     setState(() {
+      isLoading = false;
       productList.addAll(result);
     });
   }
@@ -47,11 +54,15 @@ class _ProductListPageState extends State<ProductListPage> {
 
   PreferredSizeWidget? buildAppBar(BuildContext context) {
     return AppBar(
-      title: Text(widget.category == null ? 'Все товары' : widget.category!.title),
+      title:
+          Text(widget.category == null ? 'Все товары' : widget.category!.title),
     );
   }
 
   Widget buildBody(BuildContext context) {
+    if (isLoading) {
+      return buildLoading(context);
+    }
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
         var product = productList[index];
@@ -65,6 +76,12 @@ class _ProductListPageState extends State<ProductListPage> {
         right: 12,
         top: 12,
       ),
+    );
+  }
+
+  Widget buildLoading(context) {
+    return const Center(
+      child: CircularProgressIndicator(),
     );
   }
 }
