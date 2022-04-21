@@ -1,5 +1,8 @@
-//TODO: code generation https://docs.flutter.dev/development/data-and-backend/json
+import 'package:json_annotation/json_annotation.dart';
 
+part 'product.g.dart';
+
+@JsonSerializable()
 class Product {
   final String title;
   final String? description;
@@ -13,12 +16,8 @@ class Product {
     required this.price,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
-      title: json['title'] as String,
-      description: json['productDescription'] as String?,
-      images: json['images'] as List<dynamic>?,
-      price: json['price'] as int,
-    );
-  }
+  factory Product.fromJson(Map<String, dynamic> json) =>
+      _$ProductFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ProductToJson(this);
 }

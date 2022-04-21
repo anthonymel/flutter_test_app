@@ -4,6 +4,8 @@ import 'package:untitled/model/entities/category.dart';
 import 'package:untitled/model/entities/product.dart';
 import 'package:untitled/view/product_list_item.dart';
 
+import 'product_detail_page.dart';
+
 class ProductListPage extends StatefulWidget {
   const ProductListPage({
     Key? key,
@@ -66,8 +68,11 @@ class _ProductListPageState extends State<ProductListPage> {
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
         var product = productList[index];
-        return ProductListItem(
-          product: product,
+        return InkWell(
+          onTap: () => onItemTap(product),
+          child: ProductListItem(
+            product: product,
+          ),
         );
       },
       itemCount: productList.length,
@@ -82,6 +87,14 @@ class _ProductListPageState extends State<ProductListPage> {
   Widget buildLoading(context) {
     return const Center(
       child: CircularProgressIndicator(),
+    );
+  }
+
+  onItemTap(Product product) {
+    Navigator.push(context,
+        MaterialPageRoute(
+          builder: (context) => ProductDetailPage(product: product),
+        )
     );
   }
 }

@@ -6,10 +6,8 @@ import 'package:untitled/view/category_list_item.dart';
 import 'product_list_page.dart';
 
 class CategoryListPage extends StatefulWidget {
-  const CategoryListPage({
-    Key? key,
-    this.parentId
-  }) : super(
+  const CategoryListPage({Key? key, this.parentId})
+      : super(
           key: key,
         );
   final int? parentId;
@@ -22,8 +20,7 @@ class _CategoryListPageState extends State<CategoryListPage> {
   final CategoryApi categoryApi = CategoryApi();
   final List<Category> categoryList = [];
 
-  //TODO: add loading impl
-  final bool isLoading = false;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -32,11 +29,17 @@ class _CategoryListPageState extends State<CategoryListPage> {
   }
 
   Future<void> loadData() async {
+    if (categoryList.isEmpty) {
+      setState(() {
+        isLoading = true;
+      });
+    }
     var result = await categoryApi.loadCategories(
       offset: categoryList.length,
       parentId: widget.parentId,
     );
     setState(() {
+      isLoading = false;
       categoryList.addAll(result);
     });
   }
@@ -56,6 +59,9 @@ class _CategoryListPageState extends State<CategoryListPage> {
   }
 
   Widget buildBody(BuildContext context) {
+    if (isLoading) {
+      return buildLoading(context);
+    }
     return GridView.builder(
       itemBuilder: (BuildContext context, int index) {
         var category = categoryList[index];
@@ -81,16 +87,22 @@ class _CategoryListPageState extends State<CategoryListPage> {
     );
   }
 
+  Widget buildLoading(context) {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
   onItemTap(Category category) {
-    {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => category.hasSubcategories == 0
-                  ? ProductListPage(
-                      category: category,
-                    )
-                  : CategoryListPage(parentId: category.categoryId)));
-    }
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => category.hasSubcategories == 0
+                ? ProductListPage(
+                    category: category,
+                  )
+                : CategoryListPage(
+                    parentId: category.categoryId,
+                  )));
   }
 }

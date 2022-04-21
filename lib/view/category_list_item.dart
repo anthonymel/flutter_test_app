@@ -22,23 +22,27 @@ class CategoryListItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (category.imageUrl?.isNotEmpty ?? false) ...[
-            Expanded(
-              flex: 4,
-              child: ExtendedImage.network(category.imageUrl!),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-          ],
-          Expanded(
-            flex: 1,
-            child: Text(
-              category.title,
-              maxLines: 1,
-            ),
-          ),
+          if (category.imageUrl?.isNotEmpty ?? false)
+            buildCategoryImage(context),
+          buildTitleBlock(context),
         ],
+      ),
+    );
+  }
+
+  Widget buildCategoryImage(context) {
+    return Expanded(
+      flex: 4,
+      child: ExtendedImage.network(category.imageUrl!),
+    );
+  }
+
+  Widget buildTitleBlock(context) {
+    return Expanded(
+      flex: 1,
+      child: Text(
+        category.title,
+        maxLines: 1,
       ),
     );
   }
