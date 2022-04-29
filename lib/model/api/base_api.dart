@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+
+import 'response.dart';
 
 class BaseApi {
   static const applicationKey =
@@ -10,11 +13,11 @@ class BaseApi {
 
   final httpClient = http.Client();
 
-  Future<http.Response> sendGetRequest({
+  Future<Response> sendGetRequest({
     required String method,
     Map<String, dynamic> params = const {},
   }) async {
-    return await http.get(
+    var httpResponse = await http.get(
         buildUrlQuery(
           method: method,
           params: params,
@@ -22,6 +25,41 @@ class BaseApi {
         headers: {
           HttpHeaders.contentTypeHeader: 'application/json',
         });
+    if (httpResponse.statusCode != 200) {
+      return Response(
+        error: "Http error ${httpResponse.statusCode}",
+      );
+    }
+
+    var body = httpResponse.body;
+    dynamic jsonResponse = {};
+    dynamic jsonMeta = {};
+    dynamic jsonData = {};
+
+    try {
+      jsonResponse = jsonDecode(body);
+    } catch (e) {
+      return Response(error: "Server response parsing error");
+    }
+
+    if (jsonResponse.containsKey("meta") &&
+        jsonResponse["meta"]["success"] != false) {
+      jsonMeta = jsonResponse["meta"];
+    } else {
+      return Response(
+          error: "Server response error " + jsonResponse["meta"]["error"] ?? '');
+    }
+
+    if (jsonResponse.containsKey("data")) {
+      jsonData = jsonResponse["data"];
+    } else {
+      return Response(error: "Server empty data");
+    }
+
+    return Response(
+      data: jsonData,
+      meta: jsonMeta,
+    );
   }
 
   Uri buildUrlQuery({

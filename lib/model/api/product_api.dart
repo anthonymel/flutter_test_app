@@ -1,13 +1,16 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:untitled/model/api/base_api.dart';
 
 import '../entities/product.dart';
+import 'response.dart';
 
 class ProductApi extends BaseApi {
-  Future<List<Product>> loadProducts(
-      {int offset = 0, int limit = 10, int? categoryId}) async {
+  Future<Response<List<Product>>> loadProducts({
+    int offset = 0,
+    int limit = 10,
+    int? categoryId,
+  }) async {
     var params = <String, dynamic>{
       "offset": offset,
       "limit": limit,
@@ -18,13 +21,17 @@ class ProductApi extends BaseApi {
       method: "/api/common/product/list",
       params: params,
     );
-    return parseProducts(response.body);
-  }
-
-  List<Product> parseProducts(String responseBody) {
-    final parsed =
-        jsonDecode(responseBody)["data"].cast<Map<String, dynamic>>();
-
-    return parsed.map<Product>((json) => Product.fromJson(json)).toList();
+    try {
+      var products =
+          response.data.map<Product>((json) => Product.fromJson(json)).toList();
+      return Response(
+        result: products,
+      );
+    } catch (e) {
+      print(e.toString());
+      return Response(
+        error: "Products parsing error",
+      );
+    }
   }
 }

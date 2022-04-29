@@ -27,23 +27,28 @@ class _ProductListPageState extends State<ProductListPage> {
   @override
   void initState() {
     super.initState();
-    loadData();
+    reloadData();
   }
 
-  Future<void> loadData() async {
-    if (productList.isEmpty) {
-      setState(() {
-        isLoading = true;
-      });
-    }
-    var result = await productApi.loadProducts(
+  Future<void> reloadData() async {
+    productList.clear();
+    _showLoading(context);
+    loadNextData();
+  }
+
+  Future<void> loadNextData() async {
+    var response = await productApi.loadProducts(
       categoryId: widget.category?.categoryId,
       offset: productList.length,
     );
-    setState(() {
-      isLoading = false;
-      productList.addAll(result);
-    });
+    if (response.hasError) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(response.errorText ?? ""),
+      ));
+      return;
+    }
+    productList.addAll(response.result ?? []);
+    _hideLoading(context);
   }
 
   @override
@@ -63,38 +68,72 @@ class _ProductListPageState extends State<ProductListPage> {
 
   Widget buildBody(BuildContext context) {
     if (isLoading) {
-      return buildLoading(context);
+      return _buildLoading(context);
     }
-    return ListView.builder(
-      itemBuilder: (BuildContext context, int index) {
-        var product = productList[index];
-        return InkWell(
-          onTap: () => onItemTap(product),
-          child: ProductListItem(
-            product: product,
-          ),
-        );
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        return false;
       },
-      itemCount: productList.length,
-      padding: const EdgeInsets.only(
-        left: 12,
-        right: 12,
-        top: 12,
+      child: _buildListView(context),
+    );
+  }
+
+  Widget _buildListView(BuildContext context) {
+    return RefreshIndicator(
+      backgroundColor: Colors.blue,
+      color: Colors.white,
+      onRefresh: reloadData,
+      child: ListView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          return _buildListItem(context, index);
+        },
+        itemCount: productList.length,
+        padding: const EdgeInsets.only(
+          left: 12,
+          right: 12,
+          top: 12,
+        ),
       ),
     );
   }
 
-  Widget buildLoading(context) {
+  Widget _buildListItem(BuildContext context, int index) {
+    var product = productList[index];
+    return InkWell(
+      onTap: () => _onItemTap(product),
+      child: ProductListItem(
+        product: product,
+      ),
+    );
+  }
+
+  Widget _buildLoading(BuildContext context) {
     return const Center(
       child: CircularProgressIndicator(),
     );
   }
 
-  onItemTap(Product product) {
-    Navigator.push(context,
+  void _onItemTap(Product product) {
+    Navigator.push(
+        context,
         MaterialPageRoute(
-          builder: (context) => ProductDetailPage(product: product),
-        )
-    );
+          builder: (context) => ProductDetailPage(
+            product: product,
+          ),
+        ));
+  }
+
+  void _showLoading(BuildContext context) {
+    if (productList.isEmpty) {
+      setState(() {
+        isLoading = true;
+      });
+    }
+  }
+
+  void _hideLoading(BuildContext context) {
+    setState(() {
+      isLoading = false;
+    });
   }
 }

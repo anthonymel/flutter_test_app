@@ -348,7 +348,7 @@ packages:
     source: hosted
     version: "6.1.6"
   lints:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: lints
       url: "https://pub.dartlang.org"

@@ -25,75 +25,99 @@ class _CategoryListPageState extends State<CategoryListPage> {
   @override
   void initState() {
     super.initState();
-    loadData();
+    loadNextData();
   }
 
-  Future<void> loadData() async {
-    if (categoryList.isEmpty) {
-      setState(() {
-        isLoading = true;
-      });
-    }
-    var result = await categoryApi.loadCategories(
+  Future<void> reloadData() async {
+    categoryList.clear();
+    _showLoading(context);
+    loadNextData();
+  }
+
+  Future<void> loadNextData() async {
+    _showLoading(context);
+    var response = await categoryApi.loadCategories(
       offset: categoryList.length,
       parentId: widget.parentId,
     );
-    setState(() {
-      isLoading = false;
-      categoryList.addAll(result);
-    });
+    if (response.hasError) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(response.errorText ?? ""),
+      ));
+      return;
+    }
+    categoryList.addAll(response.result ?? []);
+    _hideLoading(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context),
-      body: buildBody(context),
+      appBar: _buildAppBar(context),
+      body: _buildBody(context),
     );
   }
 
-  PreferredSizeWidget? buildAppBar(BuildContext context) {
+  PreferredSizeWidget? _buildAppBar(BuildContext context) {
     return AppBar(
       title: const Text('Каталог'),
     );
   }
 
-  Widget buildBody(BuildContext context) {
+  Widget _buildBody(BuildContext context) {
     if (isLoading) {
-      return buildLoading(context);
+      return _buildLoading(context);
     }
-    return GridView.builder(
-      itemBuilder: (BuildContext context, int index) {
-        var category = categoryList[index];
-        return InkWell(
-          onTap: () => onItemTap(category),
-          child: CategoryListItem(
-            category: category,
-          ),
-        );
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        return false;
       },
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 250,
-        childAspectRatio: 3 / 2,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 24,
-      ),
-      itemCount: categoryList.length,
-      padding: const EdgeInsets.only(
-        left: 12,
-        right: 12,
-        top: 12,
+      child: _buildGridView(context),
+    );
+  }
+
+  Widget _buildGridView(BuildContext context) {
+    return RefreshIndicator(
+      backgroundColor: Colors.blue,
+      color: Colors.white,
+      onRefresh: reloadData,
+      child: GridView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          return _buildGridItem(context, index);
+        },
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 250,
+          childAspectRatio: 3 / 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 24,
+        ),
+        itemCount: categoryList.length,
+        padding: const EdgeInsets.only(
+          left: 12,
+          right: 12,
+          top: 12,
+        ),
       ),
     );
   }
 
-  Widget buildLoading(context) {
+  Widget _buildGridItem(BuildContext context, int index) {
+    var category = categoryList[index];
+    return InkWell(
+      onTap: () => _onItemTap(category),
+      child: CategoryListItem(
+        category: category,
+      ),
+    );
+  }
+
+  Widget _buildLoading(BuildContext context) {
     return const Center(
       child: CircularProgressIndicator(),
     );
   }
 
-  onItemTap(Category category) {
+  void _onItemTap(Category category) {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -104,5 +128,19 @@ class _CategoryListPageState extends State<CategoryListPage> {
                 : CategoryListPage(
                     parentId: category.categoryId,
                   )));
+  }
+
+  void _showLoading(BuildContext context) {
+    if (categoryList.isEmpty) {
+      setState(() {
+        isLoading = true;
+      });
+    }
+  }
+
+  void _hideLoading(BuildContext context) {
+    setState(() {
+      isLoading = false;
+    });
   }
 }
