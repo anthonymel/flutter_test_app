@@ -70,7 +70,10 @@ class _CategoryListPageState extends State<CategoryListPage> {
     }
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
-        return false;
+        if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
+          loadNextData();
+        }
+        return true;
       },
       child: _buildGridView(context),
     );
@@ -78,8 +81,8 @@ class _CategoryListPageState extends State<CategoryListPage> {
 
   Widget _buildGridView(BuildContext context) {
     return RefreshIndicator(
-      backgroundColor: Colors.blue,
-      color: Colors.white,
+      backgroundColor: Colors.orangeAccent,
+      color: Colors.blueGrey,
       onRefresh: reloadData,
       child: GridView.builder(
         itemBuilder: (BuildContext context, int index) {

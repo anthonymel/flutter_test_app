@@ -72,7 +72,11 @@ class _ProductListPageState extends State<ProductListPage> {
     }
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
-        return false;
+        if (notification.metrics.pixels ==
+            notification.metrics.maxScrollExtent) {
+          loadNextData();
+        }
+        return true;
       },
       child: _buildListView(context),
     );
@@ -80,8 +84,8 @@ class _ProductListPageState extends State<ProductListPage> {
 
   Widget _buildListView(BuildContext context) {
     return RefreshIndicator(
-      backgroundColor: Colors.blue,
-      color: Colors.white,
+      backgroundColor: Colors.orangeAccent,
+      color: Colors.blueGrey,
       onRefresh: reloadData,
       child: ListView.builder(
         itemBuilder: (BuildContext context, int index) {

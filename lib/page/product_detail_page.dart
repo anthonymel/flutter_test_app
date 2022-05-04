@@ -25,6 +25,10 @@ class ProductDetailPage extends StatelessWidget {
             if (product.images?.isNotEmpty ?? false) buildProductImage(context),
             buildAddToCardAndPriceBlock(context),
             const SizedBox(height: 12),
+            Text(
+              "Описание",
+              style: TextStyle(fontSize: 18),
+            ),
             buildProductDescription(context),
           ],
         ),
@@ -52,7 +56,11 @@ class ProductDetailPage extends StatelessWidget {
         Text(product.price.toString() + " р"),
         const SizedBox(width: 12),
         OutlinedButton(
-          onPressed: () {},
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Товар\n${product.title}\nдобавлен в корзину"),
+            ));
+          },
           child: const Icon(Icons.shopping_cart),
         ),
       ],
@@ -60,8 +68,10 @@ class ProductDetailPage extends StatelessWidget {
   }
 
   Widget buildProductDescription(context) {
-    return Expanded(
-      child: Text(product.description ?? 'Описание пока не завезли...'),
+    return Container(
+      child: Expanded(
+        child: Text(product.description ?? 'Описание пока не завезли...'),
+      ),
     );
   }
 }
