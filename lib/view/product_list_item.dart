@@ -33,7 +33,7 @@ class ProductListItem extends StatelessWidget {
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 2,
                 blurRadius: 6,
-                offset: Offset(0, 2), // changes position of shadow
+                offset: Offset(2, 2), // changes position of shadow
               ),
             ],
           ),
@@ -58,9 +58,9 @@ class ProductListItem extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 6,
-            offset: Offset(4, 2), // changes position of shadow
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: Offset(8, 0), // changes position of shadow
           ),
         ],
       ),
@@ -74,14 +74,14 @@ class ProductListItem extends StatelessWidget {
   }
 
   Widget buildTitleBlock(context) {
-    return Expanded(
-      flex: 6,
+    return Flexible(
+      flex: 7,
       child: Center(child: Text(product.title)),
     );
   }
 
   Widget buildCartPriceBlock(context) {
-    return Expanded(
+    return Flexible(
       flex: 4,
       child: Center(
         child: OutlinedButton(

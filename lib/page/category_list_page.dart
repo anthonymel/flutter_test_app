@@ -70,9 +70,6 @@ class _CategoryListPageState extends State<CategoryListPage> {
     }
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
-        if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
-          loadNextData();
-        }
         return true;
       },
       child: _buildGridView(context),
@@ -92,7 +89,7 @@ class _CategoryListPageState extends State<CategoryListPage> {
           maxCrossAxisExtent: 250,
           childAspectRatio: 3 / 2,
           crossAxisSpacing: 12,
-          mainAxisSpacing: 24,
+          mainAxisSpacing: 12,
         ),
         itemCount: categoryList.length,
         padding: const EdgeInsets.only(
