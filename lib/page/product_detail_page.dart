@@ -27,7 +27,7 @@ class ProductDetailPage extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               "Описание",
-              style: TextStyle(fontSize: 18),
+              style: Theme.of(context).textTheme.headline5,
             ),
             buildProductDescription(context),
           ],
@@ -53,7 +53,10 @@ class ProductDetailPage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(product.price.toString() + " р"),
+        Text(
+          product.price.toString() + " р",
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
         const SizedBox(width: 12),
         OutlinedButton(
           onPressed: () {
@@ -70,7 +73,10 @@ class ProductDetailPage extends StatelessWidget {
   Widget buildProductDescription(context) {
     return Container(
       child: Expanded(
-        child: Text(product.description ?? 'Описание пока не завезли...'),
+        child: Text(
+          product.description ?? 'Описание пока не завезли...',
+          style: Theme.of(context).textTheme.bodyText2,
+        ),
       ),
     );
   }

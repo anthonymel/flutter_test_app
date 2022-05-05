@@ -1,4 +1,5 @@
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/model/entities/product.dart';
 import 'package:untitled/page/product_detail_page.dart';
@@ -76,7 +77,11 @@ class ProductListItem extends StatelessWidget {
   Widget buildTitleBlock(context) {
     return Flexible(
       flex: 7,
-      child: Center(child: Text(product.title)),
+      child: Center(
+          child: Text(
+        product.title,
+        textAlign: TextAlign.center,
+      )),
     );
   }
 
