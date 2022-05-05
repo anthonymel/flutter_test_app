@@ -8,12 +8,14 @@ class Product {
   final String? description;
   final List<dynamic>? images;
   final int price;
+  int cartCounter;
 
-  const Product({
+  Product({
     required this.title,
     required this.description,
     required this.images,
     required this.price,
+    this.cartCounter = 0,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) =>
