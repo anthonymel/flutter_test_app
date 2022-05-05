@@ -30,23 +30,23 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         title: Text(widget.product.title),
       ),
       body: ListView(
-          children: [
-            if (widget.product.images?.isNotEmpty ?? false)
-              _buildProductImage(context),
-            _buildAddToCardAndPriceBlock(context),
-            Padding(
-              padding: const EdgeInsets.only(left: 12.0),
-              child: Text(
-                "Описание",
-                style: Theme.of(context).textTheme.headline5,
-              ),
+        children: [
+          if (widget.product.images?.isNotEmpty ?? false)
+            _buildProductImage(context),
+          _buildAddToCardAndPriceBlock(context),
+          Padding(
+            padding: const EdgeInsets.only(left: 12.0),
+            child: Text(
+              "Описание",
+              style: Theme.of(context).textTheme.headline5,
             ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: _buildProductDescription(context),
-            ),
-          ],
-        ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: _buildProductDescription(context),
+          ),
+        ],
+      ),
     );
   }
 
