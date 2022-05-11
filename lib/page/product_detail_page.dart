@@ -81,20 +81,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton(
-          onPressed: () {
-            setState(() {
-              widget.product.cartCounter++;
-            });
-          },
-          child: const Icon(Icons.add),
-        ),
-        Padding(
-          padding: EdgeInsets.all(12),
-          child: Text(
-            widget.product.cartCounter.toString() + " шт",
-          ),
-        ),
-        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              shape: CircleBorder(), padding: EdgeInsets.all(20)),
           onPressed: () {
             setState(() {
               if (widget.product.cartCounter > 0) {
@@ -103,6 +91,27 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             });
           },
           child: const Icon(Icons.remove),
+        ),
+        Padding(
+          padding: EdgeInsets.all(12),
+          child: SizedBox(
+            width: 50,
+            child: Center(
+              child: Text(
+                widget.product.cartCounter.toString() + " шт",
+              ),
+            ),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              shape: CircleBorder(), padding: EdgeInsets.all(20)),
+          onPressed: () {
+            setState(() {
+              widget.product.cartCounter++;
+            });
+          },
+          child: const Icon(Icons.add),
         ),
       ],
     );

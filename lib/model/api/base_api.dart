@@ -47,7 +47,7 @@ class BaseApi {
       jsonMeta = jsonResponse["meta"];
     } else {
       return Response(
-          error: "Server response error " + jsonResponse["meta"]["error"] ?? '');
+          error: "Server response error ${jsonResponse["meta"]?["error"]}" );
     }
 
     if (jsonResponse.containsKey("data")) {

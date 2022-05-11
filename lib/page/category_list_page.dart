@@ -78,8 +78,6 @@ class _CategoryListPageState extends State<CategoryListPage> {
 
   Widget _buildGridView(BuildContext context) {
     return RefreshIndicator(
-      backgroundColor: Colors.orangeAccent,
-      color: Colors.blueGrey,
       onRefresh: reloadData,
       child: GridView.builder(
         itemBuilder: (BuildContext context, int index) {
