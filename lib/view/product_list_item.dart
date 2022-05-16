@@ -76,7 +76,7 @@ class ProductListItem extends StatelessWidget {
 
   Widget buildTitleBlock(context) {
     return Flexible(
-      flex: 7,
+      flex: 1,
       child: Center(
           child: Text(
         product.title,
@@ -87,15 +87,23 @@ class ProductListItem extends StatelessWidget {
 
   Widget buildCartPriceBlock(context) {
     return Flexible(
-      flex: 4,
-      child: Center(
-        child: OutlinedButton(
+      flex: 1,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+        child: Center(
+          child: OutlinedButton(
             style: OutlinedButton.styleFrom(
               minimumSize: const Size(84, 24),
               backgroundColor: Colors.white,
             ),
             onPressed: () => onTapCartPrice(context),
-            child: Text(product.price.toString() + " р")),
+            child: Text(
+              product.price.toString() + " р",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
       ),
     );
   }

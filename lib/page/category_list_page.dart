@@ -85,6 +85,7 @@ class _CategoryListPageState extends State<CategoryListPage> {
         },
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 250,
+          mainAxisExtent: 200,
           childAspectRatio: 3 / 2,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,

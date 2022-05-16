@@ -1,5 +1,4 @@
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/model/entities/product.dart';
 
@@ -29,23 +28,25 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       appBar: AppBar(
         title: Text(widget.product.title),
       ),
-      body: ListView(
-        children: [
-          if (widget.product.images?.isNotEmpty ?? false)
-            _buildProductImage(context),
-          _buildAddToCardAndPriceBlock(context),
-          Padding(
-            padding: const EdgeInsets.only(left: 12.0),
-            child: Text(
-              "Описание",
-              style: Theme.of(context).textTheme.headline5,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            if (widget.product.images?.isNotEmpty ?? false)
+              _buildProductImage(context),
+            _buildAddToCardAndPriceBlock(context),
+            Padding(
+              padding: const EdgeInsets.only(left: 12.0, top: 12.0),
+              child: Text(
+                "Описание",
+                style: Theme.of(context).textTheme.headline5,
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: _buildProductDescription(context),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: _buildProductDescription(context),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -82,7 +83,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       children: [
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-              shape: CircleBorder(), padding: EdgeInsets.all(20)),
+            shape: CircleBorder(),
+            maximumSize: Size.fromHeight(40),
+          ),
           onPressed: () {
             setState(() {
               if (widget.product.cartCounter > 0) {
@@ -90,7 +93,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               }
             });
           },
-          child: const Icon(Icons.remove),
+          child: Center(child: Icon(Icons.remove)),
         ),
         Padding(
           padding: EdgeInsets.all(12),
@@ -104,14 +107,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
         ),
         ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              shape: CircleBorder(), padding: EdgeInsets.all(20)),
+         style: ElevatedButton.styleFrom(
+            shape: CircleBorder(),
+            maximumSize: Size.fromHeight(40),
+          ),
           onPressed: () {
             setState(() {
               widget.product.cartCounter++;
             });
           },
-          child: const Icon(Icons.add),
+          child: Center(child: Icon(Icons.add)),
         ),
       ],
     );

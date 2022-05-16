@@ -42,16 +42,25 @@ class CategoryListItem extends StatelessWidget {
   Widget buildCategoryImage(context) {
     return Expanded(
       flex: 4,
-      child: ExtendedImage.network(category.imageUrl!),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: ExtendedImage.network(category.imageUrl!),
+      ),
     );
   }
 
   Widget buildTitleBlock(context) {
     return Expanded(
-      flex: 1,
-      child: Text(
-        category.title,
-        maxLines: 1,
+      flex: 3,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: Text(
+            category.title,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyText2,
+          ),
+        ),
       ),
     );
   }
