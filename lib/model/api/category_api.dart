@@ -1,19 +1,17 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:untitled/model/api/base_api.dart';
 import 'package:untitled/model/entities/category.dart';
 
 import 'response.dart';
 
-//TODO: update
 class CategoryApi extends BaseApi {
   Future<Response<List<Category>>> loadCategories({
     int offset = 0,
     int limit = 10,
     int? parentId,
   }) async {
-    var params = <String, dynamic>{
+    var params = <String, dynamic> {
       "offset": offset,
       "limit": limit,
       if (parentId != null) "parentId": parentId,
