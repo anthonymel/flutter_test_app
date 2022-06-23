@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/page/cart_list_page.dart';
 import 'package:untitled/page/category_list_page.dart';
 import 'package:untitled/page/product_list_page.dart';
 
@@ -13,6 +14,7 @@ class _BottomNavigationMenuState extends State<BottomNavigationMenu> {
   static const List<Widget> _widgetOptions = <Widget>[
     CategoryListPage(),
     ProductListPage(),
+    CartListPage(),
   ];
 
   int _selectedIndex = 0;
@@ -33,12 +35,16 @@ class _BottomNavigationMenuState extends State<BottomNavigationMenu> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.menu_rounded),
             label: 'Каталог',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
+            icon: Icon(Icons.home),
             label: 'Все товары',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Корзина',
           ),
         ],
         currentIndex: _selectedIndex,
