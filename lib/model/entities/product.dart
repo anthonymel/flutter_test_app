@@ -4,18 +4,18 @@ part 'product.g.dart';
 
 @JsonSerializable()
 class Product {
+  final int productId;
   final String title;
   final String? description;
   final List<dynamic>? images;
   final int price;
-  int cartCounter;
 
   Product({
+    required this.productId,
     required this.title,
     required this.description,
     required this.images,
     required this.price,
-    this.cartCounter = 0,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) =>

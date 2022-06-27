@@ -76,7 +76,7 @@ class ProductApi extends BaseApi {
     );
     try {
       var result =
-      response.data["sumPrice"];
+      response.data["rawSumPrice"];
       return Response(
         result: result,
       );

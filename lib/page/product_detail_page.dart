@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:untitled/model/entities/product.dart';
+
+import '../model/entities/cart.dart';
 
 class ProductDetailPage extends StatefulWidget {
   const ProductDetailPage({
@@ -78,6 +83,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Widget _buildCartBlock(BuildContext context) {
+    final cart = Provider.of<Cart>(context, listen: false);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -88,8 +95,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           onPressed: () {
             setState(() {
-              if (widget.product.cartCounter > 0) {
-                widget.product.cartCounter--;
+              if (cart.cartProducts.length > 0) {
+                cart.removeFromCart(widget.product);
+                var deleteIndex = cart.cartProducts.indexWhere((product) => product.productId == widget.product.productId);
+                cart.cartProducts.removeAt(deleteIndex);
+                log(cart.cartProducts.toString());
               }
             });
           },
@@ -101,7 +111,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             width: 50,
             child: Center(
               child: Text(
-                widget.product.cartCounter.toString() + " шт",
+                cart.cartProducts.length.toString() + " шт",
               ),
             ),
           ),
@@ -113,7 +123,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           onPressed: () {
             setState(() {
-              widget.product.cartCounter++;
+              cart.addToCart(widget.product);
+              cart.cartProducts.add(widget.product);
+              log(cart.cartProducts.toString());
             });
           },
           child: Center(child: Icon(Icons.add)),

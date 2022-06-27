@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:untitled/model/api/product_api.dart';
-import 'package:untitled/model/entities/category.dart';
+import 'package:untitled/model/entities/cart.dart';
 import 'package:untitled/model/entities/product.dart';
 import 'package:untitled/view/product_list_item.dart';
 
@@ -31,9 +32,10 @@ class _CartListPageState extends State<CartListPage> {
   }
 
   Future<void> loadCartData() async {
-    var cartResponse = await productApi.getCartPrice(productIds: [
-      {"productId": "7348", "itemCount": 1}
-    ]);
+    final cart = Provider.of<Cart>(context, listen: false);
+    var cartResponse = await productApi.getCartPrice(
+        productIds: cart.prepareCartForCalculating());
+
     if (cartResponse.hasError) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(cartResponse.errorText ?? ""),
@@ -45,16 +47,8 @@ class _CartListPageState extends State<CartListPage> {
       cartPrice = cartResponse.result;
     });
 
-    var productListResponse =
-        await productApi.loadProductsInCart(productIds: [7293, 7348]);
-    if (productListResponse.hasError) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(productListResponse.errorText ?? ""),
-      ));
-      return;
-    }
     productList.clear();
-    productList.addAll(productListResponse.result ?? []);
+    productList.addAll(cart.cartProducts);
     _hideLoading(context);
   }
 
@@ -95,6 +89,7 @@ class _CartListPageState extends State<CartListPage> {
                 left: 12,
                 right: 12,
                 top: 12,
+                bottom: 48,
               ),
             ),
           )
@@ -134,10 +129,10 @@ class _CartListPageState extends State<CartListPage> {
         bottom: 12,
       ),
       child: Container(
-        height: 32,
+        height: 36,
         decoration: BoxDecoration(
-          color: Colors.blueGrey,
-          borderRadius: BorderRadius.all(Radius.circular(20)),
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
@@ -148,9 +143,8 @@ class _CartListPageState extends State<CartListPage> {
           ],
         ),
         child: Center(
-            child: Text(
-                "Стоимость корзины: " + cartPrice.toString() + " руб",
-                style: Theme.of(context).textTheme.headline5)),
+            child: Text("Стоимость корзины: " + cartPrice.toString() + " руб",
+                style: Theme.of(context).textTheme.headline6)),
       ),
     );
   }

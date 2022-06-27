@@ -108,7 +108,7 @@ class ProductListItem extends StatelessWidget {
     );
   }
 
-  onTapCartPrice(context) {
+  void onTapCartPrice(context) {
     Navigator.push(
         context,
         MaterialPageRoute(
